@@ -27,13 +27,7 @@ addons:
 
 notifications:
   email:
-  - adam.malone@acquia.com
-  - james.gollan@acquia.com
-  - paul.killer@gmail.com
-  - sean.hamlin@acquia.com
   - stuart.rowlands@acquia.com
-  slack:
-    secure: jflE/Zs73rGpsnhN7qXqYDaVKyuwlNyQByMZrcwq2Cj7O84N3yp5x7fDbDTsJ4qYExBj3cnUXGzuS/SEtDWVdpwpjS4rcfL1uQvU4ZCuI6U9mI/KTWVGgD5+DkdS8/jZxsIfDtM8OYBwukqyaUCgGRzV609HR0NPiUofKnMxAPo=
 
 before_install:
   - sudo apt-get update -qq
@@ -73,4 +67,8 @@ script:
 
 after_success:
   - phing -f build/phing/build.xml post-commit
+
+after_failure:
+  - curl -sL https://raw.githubusercontent.com/travis-ci/artifacts/master/install | bash
+  - ~/bin/artifacts upload --target-paths "$TRAVIS_REPO_SLUG/$TRAVIS_BUILD_NUMBER/$TRAVIS_JOB_NUMBER" build/phing/screenshot-fail.png
 
